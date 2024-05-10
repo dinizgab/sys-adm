@@ -1,0 +1,40 @@
+- hosts: backup
+  remote_user: sudo 
+  
+  tasks:
+    - name: Update packages
+      apt:
+        update_cache: yes
+        state: present
+
+    - name: Install apache
+      apt:
+        name: apache2
+        state: latest
+
+    - name: Copying virtual host file to remote machine
+      copy:
+        src: ./sys-adm-site.conf
+        dest: /etc/apache2/sites-available/sys-adm-site.conf
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Copying index.html file to remote machine
+      copy:
+        src: ./index.html
+        dest: /var/www/sys-adm-site/index.html
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Enabling new virtual host
+      file:
+        name: /etc/apache2/sites-enabled/sys-adm-site.conf
+        src: /etc/apache2/sites-available/sys-adm-site.conf
+        state: link
+
+    - name: Restarting apache
+      service:
+        name: apache2
+        state: restarted 
