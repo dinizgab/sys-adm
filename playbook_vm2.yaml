@@ -1,0 +1,30 @@
+- hosts: backup
+  remote_user: sudo 
+  
+  tasks:
+    - name: Update packages
+      become: true
+      apt:
+        update_cache: yes
+        state: present
+
+    - name: Install isc-dhcp
+      become: true
+      apt:
+        name: isc-dhcp-server 
+        state: latest
+
+    - name: Copying virtual host file to remote machine
+      become: true
+      copy:
+        src: ./dhcpd.conf
+        dest: /etc/dhcp/dhcpd.conf
+        owner: root
+        group: root
+        mode: 0644
+
+    - name: Restarting dhcp-server
+      become: true
+      service: isc-dhcp-server
+      state: restarted
+

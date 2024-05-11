@@ -5,9 +5,5 @@ Description=Run monitoring machine script
 Type=oneshot
 ExecStart=/bin/monitoring_script.sh
 
-# Redirect standard output and error to a log file
-StandardOutput=syslog
-StandardError=syslog
-
 [Install]
 WantedBy=multi-user.target
