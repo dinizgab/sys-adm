@@ -1,5 +1,5 @@
 - hosts: backup
-  remote_user: sudo 
+  remote_user: aula 
   
   tasks:
     - name: Update packages
@@ -25,6 +25,6 @@
 
     - name: Restarting dhcp-server
       become: true
-      service: isc-dhcp-server
-      state: restarted
-
+      service: 
+        name: isc-dhcp-server
+        state: restarted

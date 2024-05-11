@@ -2,7 +2,7 @@
 Description=Run monitoring machine script
 
 [Service]
-Type=oneshot
+Type=simple
 ExecStart=/bin/monitoring_script.sh
 
 [Install]

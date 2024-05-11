@@ -1,18 +1,21 @@
 - hosts: backup
-  remote_user: sudo 
+  remote_user: aula 
   
   tasks:
     - name: Update packages
+      become: yes
       apt:
         update_cache: yes
         state: present
 
     - name: Install apache
+      become: yes
       apt:
         name: apache2
         state: latest
 
     - name: Copying virtual host file to remote machine
+      become: yes
       copy:
         src: ./sys-adm-site.conf
         dest: /etc/apache2/sites-available/sys-adm-site.conf
@@ -20,7 +23,15 @@
         group: root
         mode: 0644
 
+    - name: creating  folder for html
+      become: yes
+      file:
+          path: /var/www/sys-adm-site/
+          state: directory
+          mode: '0755'
+
     - name: Copying index.html file to remote machine
+      become: yes
       copy:
         src: ./index.html
         dest: /var/www/sys-adm-site/index.html
@@ -28,13 +39,17 @@
         group: root
         mode: 0644
 
-    - name: Enabling new virtual host
-      file:
-        name: /etc/apache2/sites-enabled/sys-adm-site.conf
-        src: /etc/apache2/sites-available/sys-adm-site.conf
-        state: link
 
+    - name: Disable default site
+      become: yes
+      shell: /usr/sbin/a2dissite 000-default.conf
+    
+    - name: Enable new site
+      become: yes
+      shell: /usr/sbin/a2ensite sys-adm-site.conf
+ 
     - name: Restarting apache
+      become: yes
       service:
         name: apache2
-        state: restarted 
+        state: restarted

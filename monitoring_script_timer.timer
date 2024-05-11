@@ -2,8 +2,8 @@
 Description=Monitor Machine Status
 
 [Timer]
-Unit=minute.timer
-Minutes=5 # Every 5 minutes
+Unit=monitoring_script.service
+OnCalendar=*:*:00,30 
 
 [Install]
 WantedBy=multi-user.target
